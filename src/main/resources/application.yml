@@ -4,7 +4,7 @@ server:
         uri-encoding: UTF-8
         max-threads: 1000
         min-spare-threads: 30
-    port: 8088
+    port: 9108
     connection-timeout: 5000ms
     servlet:
         context-path: /wx
@@ -13,7 +13,7 @@ debug: false
 
 spring:
     profiles:
-        active: @profile.active@ #此处由maven的环境选择决定，参考：https://www.jianshu.com/p/b7c75b0c364c
+        active: prod #此处由maven的环境选择决定，参考：https://www.jianshu.com/p/b7c75b0c364c
     # jackson时间格式化
     jackson:
         time-zone: GMT+8
@@ -56,7 +56,7 @@ renren:
     # APP模块，是通过jwt认证的，如果要使用APP模块，则需要修改【加密秘钥】
     jwt:
         # 加密秘钥
-        secret: kF3`eF0|bD0!eA1#gE0!eE3_hD0@kJ0#[niefy@qq.com]
+        secret: liShuWxManagerService
         # token有效时长，7天，单位秒
         expire: 604800
         header: token
