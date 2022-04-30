@@ -1,15 +1,21 @@
 package com.github.niefy.modules.wx.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.github.niefy.modules.wx.service.MsgReplyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.kefu.WxMpKefuMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
+import nonapi.io.github.classgraph.json.JSONUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -101,6 +107,28 @@ public class WxMpPortalController {
         }
 
         return null;
+    }
+
+    @Autowired
+    MsgReplyService msgReplyService;
+
+    @ApiOperation(value = "微信各类消息",notes = "公众号接入开发模式后才有效")
+    @GetMapping
+    public String testKeFuMessage(@PathVariable String appid){
+        try {
+            if(StringUtils.isBlank(appid)){
+                return "not find appId";
+            }
+            WxMpKefuMessage.WxArticle article = new WxMpKefuMessage.WxArticle();
+            article.setTitle("时修宴盛千意小说继续阅读");
+            article.setUrl("http://lishu.jyreader.com/wxBookInfo?chapterId=3&bookId=463");
+            article.setPicUrl("http://img.lizhireader.com/wxImg/20220417/6b9634bfd04342e0a6b966f9c0c3ec87.jpeg");
+            article.setDescription("她偏执深情的老公说:重来一世，你能不能......疼疼我");
+            msgReplyService.replyNews(appid, JSON.toJSONString(article));
+        } catch (WxErrorException e) {
+            logger.warn("testKeFuMessage error`id={}",appid,e);
+        }
+        return "ok";
     }
 
 }
